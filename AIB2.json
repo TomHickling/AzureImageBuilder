@@ -4,7 +4,7 @@
 	"identity":{
         "type": "UserAssigned",
           "userAssignedIdentities": {
-            "aibIdentity": {}
+            "1c3ac72d-fd05-4de2-8cff-bde1f5b59514": {}
         }
     },	
     "parameters": {
