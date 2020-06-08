@@ -58,7 +58,7 @@
                     {
                         "type": "PowerShell",
                         "name": "CreateBuildPath",
-                        "scriptUri": "https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/testPsScript.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MSImageBuild.ps1"
                     },
                     {
                         "type": "WindowsRestart",
