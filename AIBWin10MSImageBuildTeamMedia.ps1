@@ -1,9 +1,7 @@
 ﻿#Script to setup golden image with Azure Image Builder
 
-
 #Create temp folder
 New-Item -Path 'C:\temp' -ItemType Directory -Force | Out-Null
-
 
 #Install VSCode
 Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/?Linkid=852157' -OutFile 'c:\temp\VScode.exe'
@@ -33,10 +31,13 @@ New-Item -Path HKLM:\SOFTWARE\Microsoft\Teams -Force | Out-Null
 New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Teams -name IsWVDEnvironment -Value “1” -Force | Out-Null
 
 #Install VC++ & WebSocket Service then Teams
-New-Item -Path 'C:\temp' -ItemType Directory -Force | Out-Null
 Invoke-WebRequest -Uri 'https://support.microsoft.com/help/2977003/the-latest-supported-visual-c-downloads' -OutFile 'c:\temp\vc.msi'
 Invoke-Expression -Command 'c:\temp\vc.msi /quiet'
+#Start sleep
+Start-Sleep -Seconds 10
 Invoke-WebRequest -Uri 'https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RE4vkL6' -OutFile 'c:\temp\websocket.msi'
 Invoke-Expression -Command 'c:\temp\websocket.msi /quiet'
+#Start sleep
+Start-Sleep -Seconds 10
 Invoke-WebRequest -Uri 'https://statics.teams.cdn.office.net/production-windows-x64/1.3.00.4461/Teams_windows_x64.msi' -OutFile 'c:\temp\Teams.msi'
 Invoke-Expression -Command 'msiexec /i C:\temp\Teams.msi /quiet /l*v C:\temp\teamsinstall.log ALLUSER=1 ALLUSERS=1'
