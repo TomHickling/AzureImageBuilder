@@ -1,4 +1,4 @@
-﻿###REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST in PREVIEW###
+﻿### 1. REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST in PREVIEW###
 #Register AIB
 Install-Module Az -Force
 Connect-AzAccount
@@ -18,7 +18,7 @@ Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVaul
 
 ##Once registered begin your AIB image deployment##
 
-##CREATE VARIABLES
+## 2. AIB - CREATE VARIABLES
 # Get existing context
 $currentAzContext = Get-AzContext
 # Get your current subscription ID. 
@@ -35,7 +35,7 @@ $imageTemplateName="helloImageTemplateWin10ps"
 # This gives you the properties of the managed image on completion.
 $runOutputName="winclientR01"
 
-# Create a resource group for Image Template and Shared Image Gallery
+# 2.1 Create a resource group for Image Template and Shared Image Gallery
 New-AzResourceGroup `
    -Name $imageResourceGroup `
    -Location $location
@@ -75,7 +75,7 @@ New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $ima
 ### NOTE: If you see this error: 'New-AzRoleDefinition: Role definition limit exceeded. No more role definitions can be created.' See this article to resolve:
 https://docs.microsoft.com/azure/role-based-access-control/troubleshooting
 
-##CREATE THE SHARED IMAGE GALLERY
+## 3. CREATE THE SHARED IMAGE GALLERY
 # Set Image gallery name
 $sigGalleryName= "AIBSIG"
 
@@ -94,7 +94,7 @@ New-AzGallery `
    -ResourceGroupName $imageResourceGroup  `
    -Location $location
 
-# Create the image "definition", Windows Server or Windows client below - choose one.
+# 3.1 Create the image "definition", Windows Server or Windows client below - choose one.
 New-AzGalleryImageDefinition `
    -GalleryName $sigGalleryName `
    -ResourceGroupName $imageResourceGroup `
@@ -118,7 +118,7 @@ New-AzGalleryImageDefinition `
    -Sku '19h2-evd'
 
 
-##DOWNLOAD AND CONFIGURE THE TEMPLATE
+## 3.2 DOWNLOAD AND CONFIGURE THE TEMPLATE
    $templateFilePath = "armTemplateWinSIG.json"
 
 Invoke-WebRequest `
@@ -166,7 +166,7 @@ New-AzResourceGroupDeployment `
 
 
 
-   ##CREATE A VM from this image
+   ## 4.CREATE A VM from this image
    # Test the image is ok - This will create a VM from this image. Or you can do this via the portal.
    # You could also deploy a WVD host pool using this image in the Image gallery option in the WVD deployment process.
 
