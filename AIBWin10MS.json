@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
       "imageTemplateName": {
@@ -58,7 +58,7 @@
                     {
                         "type": "PowerShell",
                         "name": "CreateBuildPath",
-                        "scriptUri": "https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MSImageBuildTeamMedia.ps1"
+                        "scriptUri": "https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/testPsScript.ps1"
                     },
                     {
                         "type": "WindowsRestart",
@@ -68,16 +68,16 @@
                     {
                         "type": "File",
                         "name": "downloadBuildArtifacts",
-                        "sourceUri": "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/quickquickstarts/exampleArtifacts/buildArtifacts/index.html",
-                        "destination":"c:\\buildArtifacts\\index.html"
+                        "sourceUri": "https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/index.html",
+                        "destination":"c:\\temp\\buildArtifacts\\index.html"
                     },
         
                     {
                         "type": "PowerShell",
                         "name": "settingUpMgmtAgtPath",
                         "inline": [
-                            "mkdir c:\\buildActions",
-                            "echo Azure-Image-Builder-Was-Here  > c:\\buildActions\\buildActionsOutput.txt"
+                            "mkdir c:\\Temp\\buildActions",
+                            "echo Azure-Image-Builder-Was-Here  > c:\\temp\\buildActions\\buildActionsOutput.txt"
                         ]
                     },
                         
