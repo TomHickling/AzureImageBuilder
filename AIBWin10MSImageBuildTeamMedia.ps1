@@ -30,7 +30,7 @@ Start-Sleep -Seconds 10
 New-Item -Path HKLM:\SOFTWARE\Microsoft\Teams -Force | Out-Null
 New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Teams -name IsWVDEnvironment -Value “1” -Force | Out-Null
 
-#Install VC++ & WebSocket Service then Teams
+#Install VC++ & WebSocket Service then Teams with media optimisations
 Invoke-WebRequest -Uri 'https://support.microsoft.com/help/2977003/the-latest-supported-visual-c-downloads' -OutFile 'c:\temp\vc.msi'
 Invoke-Expression -Command 'c:\temp\vc.msi /quiet'
 #Start sleep
