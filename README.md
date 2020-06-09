@@ -8,4 +8,4 @@ This does everything. It needs:
 
 3. https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MS.json to do the image build which includes,
 
-4. The PS Script to download and install apps into the image: https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MSImageBuild.ps1 or variants thereof. I.E. https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MSImageBuildTeamMedia.ps1 will install Teams with Media Optimisations and its pre-requisites
+4. The PS Script to download and install apps into the image: https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MSImageBuild.ps1 or variants thereof. I.E. https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/AIBWin10MSImageBuildTeamMedia.ps1 will install Teams with Media Optimisations and its pre-requisites. Modify 3 with the path to the ps1 file that has your install procedure you want.
