@@ -1,4 +1,24 @@
-﻿##CREATE VARIABLES
+﻿###REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST in PREVIEW###
+#Register AIB
+Install-Module Az -Force
+Connect-AzAccount
+Register-AzProviderFeature -ProviderNamespace Microsoft.VirtualMachineImages -FeatureName VirtualMachineTemplatePreview
+#Check Registration status
+Get-AzProviderFeature -FeatureName VirtualMachineTemplatePreview -ProviderNamespace Microsoft.VirtualMachineImages
+#Check Provider Registration status
+Get-AzProviderFeature -ProviderNamespace Microsoft.VirtualMachineImages -FeatureName VirtualMachineTemplatePreview
+Get-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages | Select-Object RegistrationState
+Get-AzResourceProvider -ProviderNamespace Microsoft.Storage | Select-Object RegistrationState
+
+#If not "Registered" Then run these
+Register-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages
+Register-AzResourceProvider -ProviderNamespace Microsoft.Storage
+Register-AzResourceProvider -ProviderNamespace Microsoft.Compute
+Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVaul
+
+##Once registered begin your AIB image deployment##
+
+##CREATE VARIABLES
 # Get existing context
 $currentAzContext = Get-AzContext
 # Get your current subscription ID. 
@@ -10,7 +30,7 @@ $location="westus"
 # Image distribution metadata reference name
 $runOutputName="aibCustWinManImg02ro"
 # Image template name
-$imageTemplateName="helloImageTemplateWin02ps2"
+$imageTemplateName="helloImageTemplateWin10ps"
 # Distribution properties object name (runOutput).
 # This gives you the properties of the managed image on completion.
 $runOutputName="winclientR01"
@@ -20,7 +40,7 @@ New-AzResourceGroup `
    -Name $imageResourceGroup `
    -Location $location
 
-##CREATE A USER ASSIGNED IDENTITY
+##CREATE A USER ASSIGNED IDENTITY, THIS WILL BE USED TO ADD THE IMAGE TO THE SIG
 # setup role def names, these need to be unique
 $timeInt=$(get-date -UFormat "%s")
 $imageRoleDefName="Azure Image Builder Image Def"+$timeInt
@@ -30,42 +50,42 @@ $identityName="aibIdentity"
 ## Add AZ PS module to support AzUserAssignedIdentity
 Install-Module -Name Az.ManagedServiceIdentity
 
-#Create identity
-#New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName
+# Create identity
+# New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName
 New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName
-
 $identityNameResourceId=$(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
 $identityNamePrincipalId=$(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 
-##ASSIGN PERMISSIONS FOR INDENTITY TO DISTRIBUTE IMAGES
+## ASSIGN PERMISSIONS FOR THIS IDENTITY TO DISTRIBUTE IMAGES
 $aibRoleImageCreationUrl="https://raw.githubusercontent.com/TomHickling/AzureImageBuilder/master/aibRoleImageCreation.json"
 $aibRoleImageCreationPath = "aibRoleImageCreation.json"
 
-# download config
+# Download config
 Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing
-
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $aibRoleImageCreationPath
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $imageResourceGroup) | Set-Content -Path $aibRoleImageCreationPath
 ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath
 
-# create role definition
+# Create the  role definition
 New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json
 
-# grant role definition to image builder service principal
+# Grant role definition to image builder service principal
 New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
 
 ### NOTE: If you see this error: 'New-AzRoleDefinition: Role definition limit exceeded. No more role definitions can be created.' See this article to resolve:
 https://docs.microsoft.com/azure/role-based-access-control/troubleshooting
 
 ##CREATE THE SHARED IMAGE GALLERY
-# Image gallery name
-$sigGalleryName= "myIBSIG"
+# Set Image gallery name
+$sigGalleryName= "AIBSIG"
 
-# Image definition name
+# Image definition name - define an appropriate name
+# Server:
 $imageDefName ="winSvrimage"
-$imageDefName ="win10imageApps"
+# Or Win 10 Client 
+$imageDefName ="win10imageAppsTeams"
 
-# additional replication region
+# Additional replication region, this is the secondary Azure region in addition to the $location above.
 $replRegion2="eastus"
 
 # Create the gallery
@@ -74,7 +94,7 @@ New-AzGallery `
    -ResourceGroupName $imageResourceGroup  `
    -Location $location
 
-# Create the image definition
+# Create the image "definition", Windows Server or Windows client below - choose one.
 New-AzGalleryImageDefinition `
    -GalleryName $sigGalleryName `
    -ResourceGroupName $imageResourceGroup `
@@ -94,10 +114,11 @@ New-AzGalleryImageDefinition `
    -OsState generalized `
    -OsType Windows `
    -Publisher 'myCompany' `
-   -Offer 'Windows-10-App' `
+   -Offer 'Windows-10-App-Teams' `
    -Sku '19h2-evd'
 
-   ##DOWNLOAD AND CONFIGURE THE TEMPLATE
+
+##DOWNLOAD AND CONFIGURE THE TEMPLATE
    $templateFilePath = "armTemplateWinSIG.json"
 
 Invoke-WebRequest `
@@ -137,10 +158,18 @@ New-AzResourceGroupDeployment `
    -ApiVersion "2019-05-01-preview" `
    -Action Run
 
-   #Check the Image Build Process
+
+   #This has now kicked of a build into the AIB service which will do its stuff. To check the Image Build Process run the cmd below. It will go from Building, to Distributing to Complete.
    (Get-AzResource –ResourceGroupName $imageResourceGroup -ResourceType Microsoft.VirtualMachineImages/imageTemplates -Name $ImageTemplateName).Properties.lastRunStatus
 
+
+
+
    ##CREATE A VM from this image
+   # Test the image is ok - This will create a VM from this image. Or you can do this via the portal.
+   # You could also deploy a WVD host pool using this image in the Image gallery option in the WVD deployment process.
+
+
    #Get image version created
    $imageVersion = Get-AzGalleryImageVersion -ResourceGroupName $imageResourceGroup -GalleryName $sigGalleryName -GalleryImageDefinitionName $imageDefName
 
