@@ -26,7 +26,7 @@ Invoke-Expression -Command 'C:\temp\fslogix\x64\Release\FSLogixAppsSetup.exe /in
 #Start sleep
 Start-Sleep -Seconds 10
 
-#InstallTeamsMachinemode Preview Media Optimisations
+#InstallTeamsMachinemode Preview Media Optimisations - Reg pre-reqs
 New-Item -Path HKLM:\SOFTWARE\Microsoft\Teams -Force | Out-Null
 New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Teams -name IsWVDEnvironment -Value “1” -Force | Out-Null
 
