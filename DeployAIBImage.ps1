@@ -1,4 +1,4 @@
-﻿### 1. REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST in PREVIEW###
+﻿### 1. IF NOT ALREADY PRESENT REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST IN PREVIEW###
 #Register AIB
 Install-Module Az -Force
 Connect-AzAccount
@@ -24,7 +24,7 @@ $currentAzContext = Get-AzContext
 # Get your current subscription ID. 
 $subscriptionID=$currentAzContext.Subscription.Id
 # Destination image resource group
-$imageResourceGroup="AzureImageBuilder"
+$imageResourceGroup="AzureImageBuilder3"
 # Location
 $location="westus"
 # Image distribution metadata reference name
@@ -77,7 +77,7 @@ https://docs.microsoft.com/azure/role-based-access-control/troubleshooting
 
 ## 3. CREATE THE SHARED IMAGE GALLERY
 # Set Image gallery name
-$sigGalleryName= "AIBSIG"
+$sigGalleryName= "AIBSIG2"
 
 # Image definition name - define an appropriate name
 # Server:
@@ -118,7 +118,7 @@ New-AzGalleryImageDefinition `
    -Sku '19h2-evd'
 
 
-## 3.2 DOWNLOAD AND CONFIGURE THE TEMPLATE
+## 3.2 DOWNLOAD AND CONFIGURE THE TEMPLATE WITH YOUR PARAMS
    $templateFilePath = "armTemplateWinSIG.json"
 
 Invoke-WebRequest `
@@ -167,7 +167,7 @@ New-AzResourceGroupDeployment `
 
 
    ## 4.CREATE A VM from this image
-   # Test the image is ok - This will create a VM from this image. Or you can do this via the portal.
+   # Test the image is ok - This will create a VM from this image - below. Or you can just do this via the portal.
    # You could also deploy a WVD host pool using this image in the Image gallery option in the WVD deployment process.
 
 
