@@ -77,7 +77,7 @@ https://docs.microsoft.com/azure/role-based-access-control/troubleshooting
 
 ## 3. CREATE THE SHARED IMAGE GALLERY
 # Set Image gallery name
-$sigGalleryName= "AIBSIG2"
+$sigGalleryName= "AIBSIG"
 
 # Image definition name - define an appropriate name
 # Server:
