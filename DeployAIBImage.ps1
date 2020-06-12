@@ -26,7 +26,7 @@ $subscriptionID=$currentAzContext.Subscription.Id
 # Destination image resource group
 $imageResourceGroup="AzureImageBuilder3"
 # Location
-$location="westus"
+$location="northeurope"
 # Image distribution metadata reference name
 $runOutputName="aibCustWinManImg02ro"
 # Image template name
