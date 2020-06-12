@@ -1,4 +1,4 @@
-﻿### 1. IF NOT ALREADY PRESENT REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST IN PREVIEW###
+ur﻿### 1. IF NOT ALREADY PRESENT REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST IN PREVIEW###
 #Register AIB
 Install-Module Az -Force
 Connect-AzAccount
@@ -86,7 +86,7 @@ $imageDefName ="winSvrimage"
 $imageDefName ="win10imageAppsTeams"
 
 # Additional replication region, this is the secondary Azure region in addition to the $location above.
-$replRegion2="eastus"
+$replRegion2="westeurope"
 
 # Create the gallery
 New-AzGallery `
