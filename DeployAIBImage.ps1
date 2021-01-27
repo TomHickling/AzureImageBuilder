@@ -1,4 +1,4 @@
-### 1. IF NOT ALREADY PRESENT REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST IN PREVIEW###
+﻿### 1. IF NOT ALREADY PRESENT REGISTER THE AZURE IMAGE BUILDER SERVICE WHILST IN PREVIEW###
 #Register AIB
 Install-Module Az -Force
 Connect-AzAccount
@@ -14,7 +14,7 @@ Get-AzResourceProvider -ProviderNamespace Microsoft.Storage | Select-Object Regi
 Register-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages
 Register-AzResourceProvider -ProviderNamespace Microsoft.Storage
 Register-AzResourceProvider -ProviderNamespace Microsoft.Compute
-Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVault
+Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVaul
 
 ##Once registered begin your AIB image deployment##
 
@@ -24,9 +24,9 @@ $currentAzContext = Get-AzContext
 # Get your current subscription ID. 
 $subscriptionID=$currentAzContext.Subscription.Id
 # Destination image resource group
-$imageResourceGroup="AzureImageBuilder3"
+$imageResourceGroup="AzureImageBuilder"
 # Location
-$location="northeurope"
+$location="NorthEurope"
 # Image distribution metadata reference name
 $runOutputName="aibCustWinManImg02ro"
 # Image template name
