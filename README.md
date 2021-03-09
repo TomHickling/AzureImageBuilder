@@ -1,6 +1,8 @@
 This is an example of Azure Image Builder and Azure Shared Image Gallery being used to create a WVD Host pool.
 This will use the AIB service to build a Windows 10 Multi Session image with some applications in it, to effectively become our "golden image". It will then distribute the image to two Azure regions. From there you can create a WVD Host pool in those regions using this image definition.
 
+Please read this blog and follow the steps in conjunction with the files here: http://tomhickling.com/2020/06/using-azure-image-builder-and-azure.html
+
 1. Start with DeployAIBImage.ps1 to set up AIB and then all commands to create a SIG and an Image. 
 This does everything. It needs:
 
