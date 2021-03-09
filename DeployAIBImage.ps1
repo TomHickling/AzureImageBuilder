@@ -106,7 +106,9 @@ New-AzGalleryImageDefinition `
    -Offer 'WindowsServer' `
    -Sku 'WinSrv2019'
 
-   New-AzGalleryImageDefinition `
+#OR Windows 10 Multi Session with M365 apps
+
+New-AzGalleryImageDefinition `
    -GalleryName $sigGalleryName `
    -ResourceGroupName $imageResourceGroup `
    -Location $location `
@@ -159,7 +161,8 @@ New-AzResourceGroupDeployment `
    -Action Run
 
 
-   #This has now kicked of a build into the AIB service which will do its stuff. To check the Image Build Process run the cmd below. 
+   #This has now kicked of a build into the AIB service which will do its stuff.
+   #To check the Image Build Process run the cmd below. 
    #It will go from Building, to Distributing to Complete, it will take some time.
    (Get-AzResource –ResourceGroupName $imageResourceGroup -ResourceType Microsoft.VirtualMachineImages/imageTemplates -Name $ImageTemplateName).Properties.lastRunStatus
 
