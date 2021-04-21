@@ -14,7 +14,7 @@ Get-AzResourceProvider -ProviderNamespace Microsoft.Storage | Select-Object Regi
 Register-AzResourceProvider -ProviderNamespace Microsoft.VirtualMachineImages
 Register-AzResourceProvider -ProviderNamespace Microsoft.Storage
 Register-AzResourceProvider -ProviderNamespace Microsoft.Compute
-Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVaul
+Register-AzResourceProvider -ProviderNamespace Microsoft.KeyVault
 
 ##Once registered begin your AIB image deployment##
 
